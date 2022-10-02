@@ -12,7 +12,7 @@ subroutine test_gauss_ints_aos
  double precision :: integral_new, integral_1, integral_2,accu_abs, accu_relat, integral_ref
  double precision :: get_ao_tc_sym_two_e_pot, ao_tc_sym_two_e_pot, ao_two_e_integral_erf 
  double precision :: delta
- double precision :: j1b_gauss_coul_modifdebug, integral_3
+ double precision :: j1b_gauss_coulerf, integral_3
 
  accu_abs = 0.d0
  accu_relat = 0.d0
@@ -25,8 +25,8 @@ subroutine test_gauss_ints_aos
      integral_new = get_ao_tc_sym_two_e_pot(iao,jao,kao,lao,ao_tc_sym_two_e_pot_map)
 
      integral_1   = ao_two_e_integral_erf(iao,kao,jao,lao)
-     integral_2   = ao_tc_sym_two_e_pot(iao,kao,jao,lao)
-     integral_3   = j1b_gauss_coul_modifdebug(iao,kao,jao,lao)
+     integral_2   = ao_tc_sym_two_e_pot  (iao,kao,jao,lao)
+     integral_3   = j1b_gauss_coulerf    (iao,kao,jao,lao)
      integral_ref = integral_2 + integral_1 + integral_3
 
      delta = dabs(integral_ref - integral_new)

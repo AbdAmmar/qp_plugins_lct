@@ -59,8 +59,6 @@ subroutine compute_ao_tc_sym_two_e_pot_jl(j, l, n_integrals, buffer_i, buffer_va
       if( j1b_gauss .eq. 1 ) then
         integral = integral                   & 
                  + j1b_gauss_coulerf(i, k, j, l)
-                 !+ j1b_gauss_coul(i, k, j, l) &
-                 !+ j1b_gauss_erf (i, k, j, l)
       endif
 
 
