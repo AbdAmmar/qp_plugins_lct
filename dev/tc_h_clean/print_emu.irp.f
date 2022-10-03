@@ -26,8 +26,8 @@ subroutine main()
   double precision, allocatable :: e_tmp(:), tmp, e_tot
   double precision, allocatable :: e_tmp_3b(:), tmp_3b, e_3b
 
-  !print *, j1b_gauss
-  !print *, j1b_gauss_pen
+  !print *, j1b_type
+  !print *, j1b_pen
   !print *, mu_erf
 
   i = 1

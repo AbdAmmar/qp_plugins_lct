@@ -28,7 +28,7 @@ subroutine main()
   print *, ''
   do k = 1, nucl_num
     print *, 'k = ', k
-    print *, j1b_gauss_pen(k)
+    print *, j1b_pen(k)
     print *, nucl_coord(k,1:3)
   enddo
 

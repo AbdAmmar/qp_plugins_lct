@@ -26,7 +26,7 @@ subroutine compute_ao_tc_sym_two_e_pot_jl(j, l, n_integrals, buffer_i, buffer_va
   double precision                :: j1b_gauss_2e_j1, j1b_gauss_2e_j2
 
 
-  PROVIDE j1b_gauss
+  PROVIDE j1b_type
 
   thr = ao_integrals_threshold
 
@@ -53,9 +53,9 @@ subroutine compute_ao_tc_sym_two_e_pot_jl(j, l, n_integrals, buffer_i, buffer_va
       integral_erf = ao_two_e_integral_erf(i, k, j, l)
       integral     = integral_erf + integral_pot
 
-      if( j1b_gauss .eq. 1 ) then
+      if( j1b_type .eq. 1 ) then
         integral = integral + j1b_gauss_2e_j1(i, k, j, l)
-      elseif( j1b_gauss .eq. 2 ) then
+      elseif( j1b_type .eq. 2 ) then
         integral = integral + j1b_gauss_2e_j2(i, k, j, l)
       endif
 

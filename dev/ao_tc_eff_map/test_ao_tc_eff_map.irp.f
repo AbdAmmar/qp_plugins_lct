@@ -18,7 +18,7 @@ subroutine test_gauss_ints_aos
   double precision :: integral_3
   double precision :: j1b_gauss_2e_j1, j1b_gauss_2e_j2
 
-  PROVIDE j1b_gauss
+  PROVIDE j1b_type
 
   accu_abs = 0.d0
   accu_relat = 0.d0
@@ -33,9 +33,9 @@ subroutine test_gauss_ints_aos
           integral_2   = ao_tc_sym_two_e_pot  (iao,kao,jao,lao)
 
           integral_3 = 0.d0
-          if( j1b_gauss .eq. 1) then
+          if( j1b_type .eq. 1) then
             integral_3 = j1b_gauss_2e_j1(iao,kao,jao,lao)
-          elseif( j1b_gauss .eq. 2) then
+          elseif( j1b_type .eq. 2) then
             integral_3 = j1b_gauss_2e_j2(iao,kao,jao,lao)
           endif
 

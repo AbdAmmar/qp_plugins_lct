@@ -28,8 +28,8 @@ subroutine Hmu_psi()
   integer                       :: i
   double precision, allocatable :: delta(:) 
 
-  print *, j1b_gauss
-  print *, j1b_gauss_pen
+  print *, j1b_type
+  print *, j1b_pen
   print *, mu_erf
 
   allocate( delta(N_det) )

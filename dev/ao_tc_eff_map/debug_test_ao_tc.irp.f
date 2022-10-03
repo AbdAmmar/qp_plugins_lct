@@ -15,7 +15,7 @@ subroutine main()
   integer :: j, l
 
   do j = 1, nucl_num
-    print *, j, ao_nucl(j), j1b_gauss_pen(j)
+    print *, j, ao_nucl(j), j1b_pen(j)
   enddo
 
   do j = 1, ao_num
@@ -55,7 +55,7 @@ subroutine print_nuc()
   integer :: j, l
 
   do j = 1, nucl_num
-    print *, j, j1b_gauss_pen(j), nucl_coord(j,1:3)
+    print *, j, j1b_pen(j), nucl_coord(j,1:3)
   enddo
 
   do j = 1, ao_num
@@ -84,7 +84,7 @@ subroutine j1b_grd()
 
   double precision :: int_gauss_4G_deb
 
-  PROVIDE j1b_gauss_pen
+  PROVIDE j1b_pen
 
   ! --------------------------------------------------------------------------------
   ! -- Dummy call to provide everything
@@ -118,11 +118,11 @@ subroutine j1b_grd()
 
       c = 0.d0
       do k1 = 1, nucl_num
-        gama1          = j1b_gauss_pen(k1)
+        gama1          = j1b_pen(k1)
         C_center1(1:3) = nucl_coord(k1,1:3)
 
         do k2 = 1, nucl_num
-          gama2          = j1b_gauss_pen(k2)
+          gama2          = j1b_pen(k2)
           C_center2(1:3) = nucl_coord(k2,1:3)
 
           c1 = int_gauss_4G_deb( A_center, B_center, C_center1, C_center2     &

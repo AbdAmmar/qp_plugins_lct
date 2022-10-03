@@ -263,15 +263,15 @@ subroutine get_cxcycz_j2( dim1, cx, cy, cz                                  &
   double precision              :: general_primitive_integral_erf_shifted
   double precision              :: general_primitive_integral_coul_shifted
 
-  PROVIDE j1b_gauss_pen j1b_gauss_coeff
+  PROVIDE j1b_pen j1b_coeff
 
   cx = 0.d0
   cy = 0.d0
   cz = 0.d0
   do ii = 1, nucl_num
 
-    expoii        = j1b_gauss_pen  (ii)
-    coefii        = j1b_gauss_coeff(ii)
+    expoii        = j1b_pen  (ii)
+    coefii        = j1b_coeff(ii)
     Centerii(1:3) = nucl_coord(ii, 1:3)
 
     call gaussian_product(pp1, P1_center, expoii, Centerii, factii, pp2, P2_center)

@@ -94,8 +94,6 @@ subroutine diag_htilde_mu_mat_bi_ortho(Nint, key_i, hmono, htwoe, htot)
 !  PROVIDE mo_integrals_erf_map core_energy nuclear_repulsion core_bitmask
 !  PROVIDE core_fock_operator
 !
-!  PROVIDE j1b_gauss
-
 !  if(core_tc_op)then
 !   print*,'core_tc_op not already taken into account for bi ortho'
 !   print*,'stopping ...'
@@ -117,15 +115,6 @@ subroutine diag_htilde_mu_mat_bi_ortho(Nint, key_i, hmono, htwoe, htot)
    do i = 1, Ne(ispin) ! 
     ii = occ(i,ispin) 
     hmono += mo_bi_ortho_tc_one_e(ii,ii)
-
-!    if(j1b_gauss .eq. 1) then
-!      print*,'j1b not implemented for bi ortho TC'
-!      print*,'stopping  ....'
-!      stop
-!      !hmono += mo_j1b_gauss_hermI  (ii,ii) &
-!      !       + mo_j1b_gauss_hermII (ii,ii) &
-!      !       + mo_j1b_gauss_nonherm(ii,ii)
-!    endif
 
 !    if(core_tc_op)then
 !   print*,'core_tc_op not already taken into account for bi ortho'
@@ -280,8 +269,6 @@ subroutine single_htilde_mu_mat_bi_ortho(Nint, key_j, key_i, hmono, htwoe, htot)
 !
 !  PROVIDE core_bitmask core_fock_operator mo_integrals_erf_map
 
-!  PROVIDE j1b_gauss
-
   other_spin(1) = 2
   other_spin(2) = 1
 
@@ -311,15 +298,6 @@ subroutine single_htilde_mu_mat_bi_ortho(Nint, key_j, key_i, hmono, htwoe, htot)
   call decode_exc(exc,1,h1,p1,h2,p2,s1,s2)
 
   hmono = mo_bi_ortho_tc_one_e(p1,h1) * phase
-
-!  if(j1b_gauss .eq. 1) then
-!     print*,'j1b not implemented for bi ortho TC'
-!     print*,'stopping  ....'
-!     stop
-!    !hmono += ( mo_j1b_gauss_hermI  (h1,p1) &
-!    !         + mo_j1b_gauss_hermII (h1,p1) &
-!    !         + mo_j1b_gauss_nonherm(h1,p1) ) * phase
-!  endif
 
 !  if(core_tc_op)then
 !   print*,'core_tc_op not already taken into account for bi ortho'

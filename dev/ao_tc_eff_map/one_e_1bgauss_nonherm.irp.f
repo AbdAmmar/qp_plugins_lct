@@ -22,7 +22,7 @@ BEGIN_PROVIDER [ double precision, j1b_gauss_nonherm, (ao_num,ao_num)]
 
   double precision :: int_gauss_deriv
 
-  PROVIDE j1b_gauss j1b_gauss_pen j1b_gauss_coeff
+  PROVIDE j1b_type j1b_pen j1b_coeff
 
   ! --------------------------------------------------------------------------------
   ! -- Dummy call to provide everything
@@ -40,7 +40,7 @@ BEGIN_PROVIDER [ double precision, j1b_gauss_nonherm, (ao_num,ao_num)]
 
   j1b_gauss_nonherm(1:ao_num,1:ao_num) = 0.d0
 
-   if(j1b_gauss .eq. 1) then
+   if(j1b_type .eq. 1) then
   ! \tau_1b = \sum_iA -[1 - exp(-alpha_A r_iA^2)] 
 
  !$OMP PARALLEL                                                 &
@@ -51,7 +51,7 @@ BEGIN_PROVIDER [ double precision, j1b_gauss_nonherm, (ao_num,ao_num)]
  !$OMP SHARED (ao_num, ao_prim_num, ao_expo_ordered_transp,     & 
  !$OMP         ao_power, ao_nucl, nucl_coord,                   &
  !$OMP         ao_coef_normalized_ordered_transp,               &
- !$OMP         nucl_num, j1b_gauss_pen, j1b_gauss_nonherm)
+ !$OMP         nucl_num, j1b_pen, j1b_gauss_nonherm)
  !$OMP DO SCHEDULE (dynamic)
     do j = 1, ao_num
       num_A         = ao_nucl(j)
@@ -71,7 +71,7 @@ BEGIN_PROVIDER [ double precision, j1b_gauss_nonherm, (ao_num,ao_num)]
   
             c = 0.d0
             do k = 1, nucl_num
-              gama          = j1b_gauss_pen(k)
+              gama          = j1b_pen(k)
               C_center(1:3) = nucl_coord(k,1:3)
   
               !  \langle \chi_A | exp[-gama r_C^2] r_C \cdot grad | \chi_B \rangle
@@ -91,18 +91,19 @@ BEGIN_PROVIDER [ double precision, j1b_gauss_nonherm, (ao_num,ao_num)]
  !$OMP END DO
  !$OMP END PARALLEL
 
-  elseif(j1b_gauss .eq. 2) then
+  elseif(j1b_type .eq. 2) then
   ! \tau_1b = \sum_iA [c_A exp(-alpha_A r_iA^2)]
 
  !$OMP PARALLEL                                                 &
  !$OMP DEFAULT (NONE)                                           &
- !$OMP PRIVATE (i, j, k, l, m, alpha, beta, gama, coef          &
+ !$OMP PRIVATE (i, j, k, l, m, alpha, beta, gama, coef,         &
  !$OMP          A_center, B_center, C_center, power_A, power_B, &
  !$OMP          num_A, num_B, c1, c)                            &
  !$OMP SHARED (ao_num, ao_prim_num, ao_expo_ordered_transp,     & 
  !$OMP         ao_power, ao_nucl, nucl_coord,                   &
  !$OMP         ao_coef_normalized_ordered_transp,               &
- !$OMP         nucl_num, j1b_gauss_pen, j1b_gauss_nonherm)
+ !$OMP         nucl_num, j1b_pen, j1b_gauss_nonherm,            &
+ !$OMP         j1b_coeff)
  !$OMP DO SCHEDULE (dynamic)
     do j = 1, ao_num
       num_A         = ao_nucl(j)
@@ -122,8 +123,8 @@ BEGIN_PROVIDER [ double precision, j1b_gauss_nonherm, (ao_num,ao_num)]
   
             c = 0.d0
             do k = 1, nucl_num
-              gama          = j1b_gauss_pen  (k)
-              coef          = j1b_gauss_coeff(k)
+              gama          = j1b_pen  (k)
+              coef          = j1b_coeff(k)
               C_center(1:3) = nucl_coord(k,1:3)
   
               !  \langle \chi_A | exp[-gama r_C^2] r_C \cdot grad | \chi_B \rangle

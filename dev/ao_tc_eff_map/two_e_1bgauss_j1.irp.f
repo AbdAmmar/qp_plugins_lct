@@ -137,7 +137,7 @@ double precision function j1b_gauss_2e_j1_schwartz(i, j, k, l)
   double precision              :: schwartz_ij, thr
   double precision, allocatable :: schwartz_kl(:,:) 
 
-  PROVIDE j1b_gauss_pen
+  PROVIDE j1b_pen
 
   dim1 = n_pt_max_integrals
   thr  = ao_integrals_threshold * ao_integrals_threshold
@@ -263,14 +263,14 @@ subroutine get_cxcycz_j1( dim1, cx, cy, cz                                  &
   double precision              :: general_primitive_integral_erf_shifted
   double precision              :: general_primitive_integral_coul_shifted
 
-  PROVIDE j1b_gauss_pen
+  PROVIDE j1b_pen
 
   cx = 0.d0
   cy = 0.d0
   cz = 0.d0
   do ii = 1, nucl_num
 
-    expoii        = j1b_gauss_pen(ii)
+    expoii        = j1b_pen(ii)
     Centerii(1:3) = nucl_coord(ii, 1:3)
 
     call gaussian_product(pp1, P1_center, expoii, Centerii, factii, pp2, P2_center)

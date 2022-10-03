@@ -68,7 +68,7 @@ subroutine run_cipsi_tc
 
     ! ---
     PROVIDE psi_det psi_coef mo_two_e_integrals_in_map diag_htilde 
-    PROVIDE mo_two_e_integrals_tc_int_in_map mo_two_e_integrals_tcdag_int_in_map
+    PROVIDE mo_two_e_integrals_tc_int_in_map
     call provide_all_three_ints
     ! ---
 

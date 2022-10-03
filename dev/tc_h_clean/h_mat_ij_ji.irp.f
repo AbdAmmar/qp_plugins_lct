@@ -133,7 +133,7 @@ subroutine single_hij_ji_mu_mat_scal_map(Nint, key_j, key_i, hmono_ji,hmono_ij, 
 
   PROVIDE core_bitmask core_fock_operator mo_integrals_erf_map
 
-  PROVIDE j1b_gauss
+  PROVIDE j1b_type
 
   other_spin(1) = 2
   other_spin(2) = 1
@@ -166,12 +166,12 @@ subroutine single_hij_ji_mu_mat_scal_map(Nint, key_j, key_i, hmono_ji,hmono_ij, 
   hmono_ji = mo_one_e_integrals(h1,p1) * phase
   hmono_ij = mo_one_e_integrals(p1,h1) * phase
 
-  if( j1b_gauss .eq. 1 ) then
+  if( j1b_type .ne. 0 ) then
     hmono_ji += ( mo_j1b_gauss_hermI  (h1,p1) &
-             +     mo_j1b_gauss_hermII(h1,p1) &
+             +    mo_j1b_gauss_hermII (h1,p1) &
              +    mo_j1b_gauss_nonherm(h1,p1) ) * phase
     hmono_ij += ( mo_j1b_gauss_hermI  (p1,h1) &
-             +     mo_j1b_gauss_hermII(p1,h1) &
+             +    mo_j1b_gauss_hermII (p1,h1) &
              +    mo_j1b_gauss_nonherm(p1,h1) ) * phase
   endif
 

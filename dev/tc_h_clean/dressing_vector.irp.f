@@ -474,7 +474,7 @@ subroutine htcdag_calc_tdav(v, u, N_st, sze)
 
   i = 1
   j = 1
-  call htildedag_mu_mat_tot(psi_det(1,1,i), psi_det(1,1,j), N_int, htot)
+  call htilde_mu_mat_tot(psi_det(1,1,j), psi_det(1,1,i), N_int, htot)
 
   v = 0.d0
 
@@ -484,7 +484,6 @@ subroutine htcdag_calc_tdav(v, u, N_st, sze)
   do istate = 1, N_st
     do i = 1, sze
       do j = 1, sze
-        !call htildedag_mu_mat_tot(psi_det(1,1,i), psi_det(1,1,j), N_int, htot)
         call htilde_mu_mat_tot(psi_det(1,1,j), psi_det(1,1,i), N_int, htot)
         v(i,istate) = v(i,istate) + htot * u(j,istate)
       enddo
