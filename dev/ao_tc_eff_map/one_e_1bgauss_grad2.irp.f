@@ -1,8 +1,8 @@
+! ---
+
 BEGIN_PROVIDER [ double precision, j1b_gauss_hermII, (ao_num,ao_num)]
 
   BEGIN_DOC
-  !
-  ! Hermitian part of 1-body Jastrow factow in the |AO| basis set.
   !
   !  :math:`\langle \chi_A | -0.5 \grad \tau_{1b} \cdot \grad \tau_{1b} | \chi_B \rangle` 
   !
@@ -13,7 +13,7 @@ BEGIN_PROVIDER [ double precision, j1b_gauss_hermII, (ao_num,ao_num)]
   integer          :: num_A, num_B
   integer          :: power_A(3), power_B(3)
   integer          :: i, j, k1, k2, l, m
-  double precision :: alpha, beta, gama1, gama2
+  double precision :: alpha, beta, gama1, gama2, coef1, coef2
   double precision :: A_center(3), B_center(3), C_center1(3), C_center2(3)
   double precision :: c1, c
 
@@ -22,7 +22,7 @@ BEGIN_PROVIDER [ double precision, j1b_gauss_hermII, (ao_num,ao_num)]
 
   double precision :: int_gauss_4G
 
-  PROVIDE j1b_gauss_pen
+  PROVIDE j1b_gauss j1b_gauss_pen j1b_gauss_coeff
 
   ! --------------------------------------------------------------------------------
   ! -- Dummy call to provide everything
@@ -40,6 +40,9 @@ BEGIN_PROVIDER [ double precision, j1b_gauss_hermII, (ao_num,ao_num)]
 
   j1b_gauss_hermII(1:ao_num,1:ao_num) = 0.d0
 
+  if(j1b_gauss .eq. 1) then
+  ! \tau_1b = \sum_iA -[1 - exp(-alpha_A r_iA^2)]
+
  !$OMP PARALLEL                                                 &
  !$OMP DEFAULT (NONE)                                           &
  !$OMP PRIVATE (i, j, k1, k2, l, m, alpha, beta, gama1, gama2,  &
@@ -49,55 +52,110 @@ BEGIN_PROVIDER [ double precision, j1b_gauss_hermII, (ao_num,ao_num)]
  !$OMP         ao_power, ao_nucl, nucl_coord,                   &
  !$OMP         ao_coef_normalized_ordered_transp,               &
  !$OMP         nucl_num, j1b_gauss_pen, j1b_gauss_hermII)
-
  !$OMP DO SCHEDULE (dynamic)
-
-  do j = 1, ao_num
-
-    num_A         = ao_nucl(j)
-    power_A(1:3)  = ao_power(j,1:3)
-    A_center(1:3) = nucl_coord(num_A,1:3)
-
-    do i = 1, ao_num
-
-      num_B         = ao_nucl(i)
-      power_B(1:3)  = ao_power(i,1:3)
-      B_center(1:3) = nucl_coord(num_B,1:3)
-
-      do l = 1, ao_prim_num(j)
-        alpha = ao_expo_ordered_transp(l,j)
-
-        do m = 1, ao_prim_num(i)
-          beta = ao_expo_ordered_transp(m,i)
-
-          c = 0.d0
-          do k1 = 1, nucl_num
-            gama1          = j1b_gauss_pen(k1)
-            C_center1(1:3) = nucl_coord(k1,1:3)
-
-            do k2 = 1, nucl_num
-              gama2          = j1b_gauss_pen(k2)
-              C_center2(1:3) = nucl_coord(k2,1:3)
-
-              ! < XA | exp[-gama1 r_C1^2 -gama2 r_C2^2] r_C1 \cdot r_C2 | XB >
-              c1 = int_gauss_4G( A_center, B_center, C_center1, C_center2     &
-                               , power_A, power_B, alpha, beta, gama1, gama2  )
-
-              c = c - 2.d0 * gama1 * gama2 * c1
+    do j = 1, ao_num
+      num_A         = ao_nucl(j)
+      power_A(1:3)  = ao_power(j,1:3)
+      A_center(1:3) = nucl_coord(num_A,1:3)
+  
+      do i = 1, ao_num
+        num_B         = ao_nucl(i)
+        power_B(1:3)  = ao_power(i,1:3)
+        B_center(1:3) = nucl_coord(num_B,1:3)
+  
+        do l = 1, ao_prim_num(j)
+          alpha = ao_expo_ordered_transp(l,j)
+  
+          do m = 1, ao_prim_num(i)
+            beta = ao_expo_ordered_transp(m,i)
+  
+            c = 0.d0
+            do k1 = 1, nucl_num
+              gama1          = j1b_gauss_pen(k1)
+              C_center1(1:3) = nucl_coord(k1,1:3)
+  
+              do k2 = 1, nucl_num
+                gama2          = j1b_gauss_pen(k2)
+                C_center2(1:3) = nucl_coord(k2,1:3)
+  
+                ! < XA | exp[-gama1 r_C1^2 -gama2 r_C2^2] r_C1 \cdot r_C2 | XB >
+                c1 = int_gauss_4G( A_center, B_center, C_center1, C_center2     &
+                                 , power_A, power_B, alpha, beta, gama1, gama2  )
+  
+                c = c - 2.d0 * gama1 * gama2 * c1
+              enddo
             enddo
+  
+            j1b_gauss_hermII(i,j) = j1b_gauss_hermII(i,j)      & 
+                      + ao_coef_normalized_ordered_transp(l,j) &
+                      * ao_coef_normalized_ordered_transp(m,i) * c
           enddo
-
-          j1b_gauss_hermII(i,j) = j1b_gauss_hermII(i,j)      & 
-                    + ao_coef_normalized_ordered_transp(l,j) &
-                    * ao_coef_normalized_ordered_transp(m,i) * c
-
         enddo
       enddo
     enddo
-  enddo
-
  !$OMP END DO
  !$OMP END PARALLEL
+
+  elseif(j1b_gauss .eq. 2) then
+  ! \tau_1b = \sum_iA [c_A exp(-alpha_A r_iA^2)]
+
+ !$OMP PARALLEL                                                 &
+ !$OMP DEFAULT (NONE)                                           &
+ !$OMP PRIVATE (i, j, k1, k2, l, m, alpha, beta, gama1, gama2,  &
+ !$OMP          A_center, B_center, C_center1, C_center2,       &
+ !$OMP          power_A, power_B, num_A, num_B, c1, c,          &
+ !$OMP          coef1, coef2)                                   &
+ !$OMP SHARED (ao_num, ao_prim_num, ao_expo_ordered_transp,     & 
+ !$OMP         ao_power, ao_nucl, nucl_coord,                   &
+ !$OMP         ao_coef_normalized_ordered_transp,               &
+ !$OMP         nucl_num, j1b_gauss_pen, j1b_gauss_hermII)
+ !$OMP DO SCHEDULE (dynamic)
+    do j = 1, ao_num
+      num_A         = ao_nucl(j)
+      power_A(1:3)  = ao_power(j,1:3)
+      A_center(1:3) = nucl_coord(num_A,1:3)
+  
+      do i = 1, ao_num
+        num_B         = ao_nucl(i)
+        power_B(1:3)  = ao_power(i,1:3)
+        B_center(1:3) = nucl_coord(num_B,1:3)
+  
+        do l = 1, ao_prim_num(j)
+          alpha = ao_expo_ordered_transp(l,j)
+  
+          do m = 1, ao_prim_num(i)
+            beta = ao_expo_ordered_transp(m,i)
+  
+            c = 0.d0
+            do k1 = 1, nucl_num
+              gama1          = j1b_gauss_pen  (k1)
+              coef1          = j1b_gauss_coeff(k1)
+              C_center1(1:3) = nucl_coord(k1,1:3)
+  
+              do k2 = 1, nucl_num
+                gama2          = j1b_gauss_pen  (k2)
+                coef2          = j1b_gauss_coeff(k2)
+                C_center2(1:3) = nucl_coord(k2,1:3)
+  
+                ! < XA | exp[-gama1 r_C1^2 -gama2 r_C2^2] r_C1 \cdot r_C2 | XB >
+                c1 = int_gauss_4G( A_center, B_center, C_center1, C_center2     &
+                                 , power_A, power_B, alpha, beta, gama1, gama2  )
+  
+                c = c - 2.d0 * gama1 * gama2 * coef1 * coef2 * c1
+              enddo
+            enddo
+  
+            j1b_gauss_hermII(i,j) = j1b_gauss_hermII(i,j)      & 
+                      + ao_coef_normalized_ordered_transp(l,j) &
+                      * ao_coef_normalized_ordered_transp(m,i) * c
+          enddo
+        enddo
+      enddo
+    enddo
+ !$OMP END DO
+ !$OMP END PARALLEL
+
+  endif
 
 END_PROVIDER
 
@@ -269,3 +327,5 @@ double precision function int_gauss_4G( A_center, B_center, C_center1, C_center2
 end function int_gauss_4G
 !_____________________________________________________________________________________________________________
 !_____________________________________________________________________________________________________________
+
+
