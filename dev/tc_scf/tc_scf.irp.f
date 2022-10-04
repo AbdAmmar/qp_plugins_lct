@@ -68,6 +68,9 @@ subroutine routine_scf()
   double precision              :: e_save, e_delta, rho_delta
   double precision, allocatable :: rho_old(:,:), rho_new(:,:)
 
+  PROVIDE j1b_type j1b_pen j1b_coeff
+  print*, ' j1b_type:', j1b_type, j1b_pen, j1b_coeff
+
   allocate(rho_old(ao_num,ao_num), rho_new(ao_num,ao_num))
 
   it = 0

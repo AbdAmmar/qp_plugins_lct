@@ -298,7 +298,7 @@ subroutine get_cxcycz_j2( dim1, cx, cy, cz                                  &
     cx = cx + expoii * coefii * general_primitive_integral_coul_shifted( dim1      &
                       , P2_new, P2_center, fact_p2, pp2, p2_inv, iorder_p, shift_P &
                       , Q1_new, Q1_center, fact_q1, qq1, q1_inv, iorder_q, shift_Q )
-    cx = cx - expoii * general_primitive_integral_erf_shifted( dim1                &
+    cx = cx - expoii * coefii * general_primitive_integral_erf_shifted( dim1       &
                       , P2_new, P2_center, fact_p2, pp2, p2_inv, iorder_p, shift_P &
                       , Q1_new, Q1_center, fact_q1, qq1, q1_inv, iorder_q, shift_Q )
 
@@ -306,9 +306,9 @@ subroutine get_cxcycz_j2( dim1, cx, cy, cz                                  &
     cx = cx + expoii * coefii * 2.d0 * ff * general_primitive_integral_coul_shifted( dim1 &
                       , P2_new, P2_center, fact_p2, pp2, p2_inv, iorder_p, shift_P        &
                       , Q1_new, Q1_center, fact_q1, qq1, q1_inv, iorder_q, shift_Q        )
-    cx = cx - expoii * 2.d0 * ff * general_primitive_integral_erf_shifted( dim1          &
-                      , P2_new, P2_center, fact_p2, pp2, p2_inv, iorder_p, shift_P       &
-                      , Q1_new, Q1_center, fact_q1, qq1, q1_inv, iorder_q, shift_Q       )
+    cx = cx - expoii * coefii * 2.d0 * ff * general_primitive_integral_erf_shifted( dim1  &
+                      , P2_new, P2_center, fact_p2, pp2, p2_inv, iorder_p, shift_P        &
+                      , Q1_new, Q1_center, fact_q1, qq1, q1_inv, iorder_q, shift_Q        )
 
     shift_P = (/ 0, 0, 0 /)
     cx = cx + expoii * coefii * ff * ff * general_primitive_integral_coul_shifted( dim1 &

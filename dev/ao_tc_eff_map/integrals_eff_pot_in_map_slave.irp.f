@@ -68,7 +68,7 @@ subroutine ao_tc_sym_two_e_pot_in_map_slave(thread,iproc)
     if (task_id == 0) exit
     read(task,*) j, l
     integer, external :: task_done_to_taskserver
-    call compute_ao_tc_sym_two_e_pot_jl(j,l,n_integrals,buffer_i,buffer_value)
+    call compute_ao_tc_sym_two_e_pot_jl(j, l, n_integrals, buffer_i, buffer_value)
     if (task_done_to_taskserver(zmq_to_qp_run_socket,worker_id,task_id) == -1) then
         stop 'Unable to send task_done'
     endif
@@ -87,11 +87,13 @@ end
 
 
 subroutine ao_tc_sym_two_e_pot_in_map_collector(zmq_socket_pull)
+
   use map_module
   use f77_zmq
   implicit none
+
   BEGIN_DOC
-! Collects results from the AO integral calculation
+  ! Collects results from the AO integral calculation
   END_DOC
 
   integer(ZMQ_PTR), intent(in)   :: zmq_socket_pull
@@ -161,7 +163,7 @@ IRP_ELSE
 IRP_ENDIF
 
 
-      call insert_into_ao_tc_sym_two_e_pot_map(n_integrals,buffer_i,buffer_value)
+      call insert_into_ao_tc_sym_two_e_pot_map(n_integrals, buffer_i, buffer_value)
       accu += n_integrals
       if (task_id /= 0) then
         integer, external :: zmq_delete_task
