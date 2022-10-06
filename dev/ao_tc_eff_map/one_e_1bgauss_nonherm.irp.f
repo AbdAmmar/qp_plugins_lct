@@ -81,7 +81,7 @@ BEGIN_PROVIDER [ double precision, j1b_gauss_nonherm, (ao_num,ao_num)]
               c = c + 2.d0 * gama * c1 
             enddo
   
-            j1b_gauss_nonherm(i,j) =  j1b_gauss_nonherm(i,j) & 
+            j1b_gauss_nonherm(j,i) =  j1b_gauss_nonherm(j,i) & 
                     + ao_coef_normalized_ordered_transp(l,j) &
                     * ao_coef_normalized_ordered_transp(m,i) * c
           enddo
@@ -134,7 +134,7 @@ BEGIN_PROVIDER [ double precision, j1b_gauss_nonherm, (ao_num,ao_num)]
               c = c + 2.d0 * gama * coef * c1 
             enddo
   
-            j1b_gauss_nonherm(i,j) =  j1b_gauss_nonherm(i,j) & 
+            j1b_gauss_nonherm(j,i) =  j1b_gauss_nonherm(j,i) & 
                     + ao_coef_normalized_ordered_transp(l,j) &
                     * ao_coef_normalized_ordered_transp(m,i) * c
           enddo

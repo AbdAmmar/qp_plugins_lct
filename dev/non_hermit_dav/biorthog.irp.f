@@ -327,7 +327,7 @@ subroutine non_hrmt_bieig(n, A, leigvec, reigvec, n_real_eigv, eigval)
   !                  track & sort the real eigenvalues 
 
   n_good = 0
-  thr    = 1.d-5
+  thr    = 1.d-2
   do i = 1, n
     if(dabs(WI(i)) .lt. thr) then
       n_good += 1
@@ -392,8 +392,11 @@ subroutine non_hrmt_bieig(n, A, leigvec, reigvec, n_real_eigv, eigval)
   ! -------------------------------------------------------------------------------------
   !                               check bi-orthogonality
 
-  thr_d  = 1d-8
-  thr_nd = 1d-8
+  thr_d  = 1d-6
+  thr_nd = 1d-6
+
+  thr_diag = 10.d0
+  thr_norm = 1d+10
 
   allocate( S(n_real_eigv,n_real_eigv) )
   call check_biorthog(n, n_real_eigv, leigvec, reigvec, accu_d, accu_nd, S, .false.)
@@ -409,8 +412,6 @@ subroutine non_hrmt_bieig(n, A, leigvec, reigvec, n_real_eigv, eigval)
     print *, ' lapack vectors are not normalized but bi-orthogonalized'
     call check_biorthog_binormalize(n, n_real_eigv, leigvec, reigvec, .true.)
 
-    thr_diag = 1d-10
-    thr_norm = 1d+10
     call check_EIGVEC(n, n, A, eigval, leigvec, reigvec, thr_diag, thr_norm, .true.)
 
     deallocate(S)
@@ -445,8 +446,6 @@ subroutine non_hrmt_bieig(n, A, leigvec, reigvec, n_real_eigv, eigval)
 
     ! ---
 
-    thr_diag = 1d-10
-    thr_norm = 1d+10
     call check_EIGVEC(n, n, A, eigval, leigvec, reigvec, thr_diag, thr_norm, .true.)
 
     deallocate(S)

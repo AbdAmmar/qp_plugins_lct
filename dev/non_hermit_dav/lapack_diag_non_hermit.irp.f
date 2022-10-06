@@ -1195,10 +1195,12 @@ subroutine impose_orthog_svd(n, m, C)
 
   deallocate(S)
 
-  threshold               = 1.d-6
+  !threshold               = 1.d-6
+  threshold               = 1.d-10
   num_linear_dependencies = 0
   do i = 1, m
     if(abs(D(i)) <= threshold) then
+      !print*, D(i)
       D(i) = 0.d0
       num_linear_dependencies += 1
     else
@@ -1767,7 +1769,7 @@ subroutine check_biorthog(n, m, Vl, Vr, accu_d, accu_nd, S, stop_ifnot)
       endif
     enddo
   enddo
-  accu_nd = dsqrt(accu_nd)
+  accu_nd = dsqrt(accu_nd) / dble(m)
 
   print *, ' accu_nd = ', accu_nd
   print *, ' accu_d  = ', dabs(accu_d-dble(m))/dble(m)
