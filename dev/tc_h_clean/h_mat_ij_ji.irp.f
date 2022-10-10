@@ -166,7 +166,8 @@ subroutine single_hij_ji_mu_mat_scal_map(Nint, key_j, key_i, hmono_ji,hmono_ij, 
   hmono_ji = mo_one_e_integrals(h1,p1) * phase
   hmono_ij = mo_one_e_integrals(p1,h1) * phase
 
-  if( j1b_type .ne. 0 ) then
+  ! TODO check mo_j1b_gauss_nonherm
+  if(j1b_type .ne. 0) then
     hmono_ji += ( mo_j1b_gauss_hermI  (h1,p1) &
              +    mo_j1b_gauss_hermII (h1,p1) &
              +    mo_j1b_gauss_nonherm(h1,p1) ) * phase

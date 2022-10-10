@@ -44,7 +44,8 @@ subroutine diag_htilde_mu_mat_scal_map(Nint, key_i, hmono, heff, hderiv, htot)
     ii = occ(i,ispin) 
     hmono += mo_one_e_integrals(ii,ii)
 
-    if( j1b_type .ne. 0 ) then
+    ! TODO check mo_j1b_gauss_nonherm
+    if(j1b_type .ne. 0) then
       hmono += mo_j1b_gauss_hermI  (ii,ii) &
              + mo_j1b_gauss_hermII (ii,ii) &
              + mo_j1b_gauss_nonherm(ii,ii)
@@ -245,8 +246,9 @@ subroutine single_htilde_mu_mat_scal_map(Nint, key_j, key_i, hmono, heff, hderiv
   call decode_exc(exc,1,h1,p1,h2,p2,s1,s2)
 
   hmono = mo_one_e_integrals(h1,p1) * phase
-
-  if( j1b_type .ne. 0 ) then
+ 
+  ! TODO check mo_j1b_gauss_nonherm
+  if(j1b_type .ne. 0) then
     hmono += ( mo_j1b_gauss_hermI  (h1,p1) &
              + mo_j1b_gauss_hermII (h1,p1) &
              + mo_j1b_gauss_nonherm(h1,p1) ) * phase

@@ -90,7 +90,7 @@ subroutine routine_scf()
   rho_delta = 10.d0
 
 
-  if(bi_ortho)then
+  if(bi_ortho) then
 
    mo_l_coef = fock_tc_leigvec_ao
    mo_r_coef = fock_tc_reigvec_ao
@@ -98,7 +98,6 @@ subroutine routine_scf()
    call ezfio_set_bi_ortho_mos_mo_l_coef(mo_l_coef)
    call ezfio_set_bi_ortho_mos_mo_r_coef(mo_r_coef)
    TOUCH mo_l_coef mo_r_coef
-
 
   else
 
@@ -114,8 +113,8 @@ subroutine routine_scf()
   if(bi_ortho) then
 
     !do while( it .lt. n_it_tcscf_max .and. (e_delta .gt. dsqrt(thresh_tcscf)) )
-    !do while( it .lt. n_it_tcscf_max .and. (e_delta .gt. thresh_tcscf) )
-    do while( it .lt. n_it_tcscf_max .and. (rho_delta .gt. thresh_tcscf) )
+    do while( it .lt. n_it_tcscf_max .and. (e_delta .gt. thresh_tcscf) )
+    !do while( it .lt. n_it_tcscf_max .and. (rho_delta .gt. thresh_tcscf) )
 
       it += 1
       print*,'iteration = ', it
