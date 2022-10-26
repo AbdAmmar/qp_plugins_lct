@@ -86,6 +86,38 @@ end subroutine get_delta_tc_psi
 
 ! ---
 
+subroutine get_H_psi(psidet, psicoef, ndet, Nint, delta)
+
+  use bitmasks
+
+  implicit none
+  integer, intent(in)            :: ndet, Nint
+  double precision, intent(in)   :: psicoef(ndet)
+  integer(bit_kind), intent(in)  :: psidet(Nint,2,ndet)
+  double precision, intent(out)  :: delta(ndet) 
+  integer                        :: i,j
+  double precision               :: hij
+
+  i = 1
+  j = 1
+  call i_H_j(psidet(1,1,i), psidet(1,1,j), Nint, hij)
+
+  delta = 0.d0
+ !$OMP PARALLEL DO DEFAULT(NONE) SCHEDULE(dynamic,8) &
+ !$OMP SHARED(delta, ndet, psidet, psicoef, Nint)    &
+ !$OMP PRIVATE(i, j, hij)
+  do i = 1, ndet
+    do j = 1, ndet
+      call i_H_j(psidet(1,1,i), psidet(1,1,j), Nint, hij)
+      delta(i) = delta(i) + psicoef(j) * hij
+    enddo
+  enddo
+ !$OMP END PARALLEL DO
+
+end subroutine get_H_psi
+
+! ---
+
 subroutine get_Htc_psi(psidet, psicoef, ndet, Nint, delta)
 
   use bitmasks

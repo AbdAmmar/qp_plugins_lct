@@ -45,7 +45,7 @@ subroutine diag_htilde_mu_mat_scal_map(Nint, key_i, hmono, heff, hderiv, htot)
     hmono += mo_one_e_integrals(ii,ii)
 
     ! TODO check mo_j1b_gauss_nonherm
-    if(j1b_type .ne. 0) then
+    if((j1b_type .eq. 1) .or. (j1b_type .eq. 2)) then
       hmono += mo_j1b_gauss_hermI  (ii,ii) &
              + mo_j1b_gauss_hermII (ii,ii) &
              + mo_j1b_gauss_nonherm(ii,ii)

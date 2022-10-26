@@ -34,6 +34,7 @@ subroutine delta_dmcdressing()
   !do k = 1, 1
 
     ! get < I | H_mu - H | psi > 
+    !call get_H_psi(psi_det, psi_coef(:,k), N_det, N_int, delta(:,k))
     call get_delta_tc_psi(psi_det, psi_coef(:,k), N_det, N_int, delta(:,k))
 
     ! order as QMCCHEM
